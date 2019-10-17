@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery/jquery-1.12.4.min.js"></script>
+    <script src="/js/jquery/jquery.form.js"></script>
+    <script src="/js/moment/moment.min.js"></script>
+    <script src="/js/numeral/numeral.min.js"></script>
+    <script src="/js/numeral/chs.min.js"></script>
+    <script src="/js/common/base.js"></script>
+    <script src="/js/common/normal.js"></script>
+    <script>
+        var Base = {"url":"/"};
+        function init() {
+            $.post("findSuevey".parseUrl(Base.url),function (result) {
+                alert("进来可");
+                var obj = $.dealJSONObj(result);
+                if (!obj.code) {
+                    // language=Angular2Html
+                    var s = "<tr>\n    <td>{0}</td>\n    <td>{1}</td>\n    <td>{2}</td>\n    <td>{3}</td>\n    <td>{4}</td>\n    <td>{5}</td>\n</tr>";
+                    var str = "";
+                    $.each(obj.data, function (k, v) {
+                        s = s.formatStr(
+
+                        );
+                        str += s;
+                    })
+                    $("#data").empty();
+                    $("#data").html(str);
+                }else {
+                    $("#data").empty();
+                    $("#data").html("<tr><td colspan='6'>暂时没有销售记录</td></tr>")
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <div align="center">
+        <form style="align-content: center">
+            <table align="center" border="1">
+                <thead>
+                    <tr>
+                        <td>问卷名称</td>
+                        <td>问卷编号</td>
+                        <td>问卷类型</td>
+                        <td colspan="3" align="center">问卷操作</td>
+
+                    </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

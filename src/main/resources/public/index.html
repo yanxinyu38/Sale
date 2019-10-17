@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="ff">
+    <table align="center" bgcolor="#90ee90" width="500">
+        <tr>
+            <th colspan="4">
+                <h2>小型进销存系统</h2>
+            </th>
+        </tr>
+        <tr>
+            <td width="100"></td>
+            <td>用户名：</td>
+            <td><input type="text" name="userName"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td width="100"></td>
+            <td>密码：</td>
+            <td><input type="password" name="password"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td align="center" colspan="4">
+                <input type="button" value="登陆" onclick="mySubmit()">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/jquery/jquery-1.12.4.min.js"></script>
+<script src="/js/jquery/jquery.form.js"></script>
+<script src="/js/moment/moment.min.js"></script>
+<script src="/js/numeral/numeral.min.js"></script>
+<script src="/js/numeral/chs.min.js"></script>
+<script src="/js/common/base.js"></script>
+<script src="/js/common/normal.js"></script>
+<script>
+    var Base = {"url":"/"};
+    //登录的提交
+    function mySubmit() {
+        $.post("login".parseUrl(Base.url),$("#ff").serialize()).always(doLogin);
+    }
+
+    function doLogin(result) {
+        var obj =$.dealJSONObj(result);
+        if(!obj.code) {
+            location="welcome.html";
+        }else {
+            alert(obj.msg);
+        }
+    }
+
+</script>
+</body>
+</html>

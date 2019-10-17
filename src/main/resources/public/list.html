@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #ff tbody tr:nth-child(odd){
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+<div style="float: right;width: 620px;height: 400px;text-align: center;">
+    <form id="ff">
+        <div style="float: left">
+            <strong>销售信息查询</strong>
+        </div>
+        <div style="float: right">
+            排序方式：
+            <select id="orderBy" name="orderBy">
+                <option value="sale_date">销售日期</option>
+                <option value="total_price">单笔总价</option>
+            </select>
+            <input type="button" value="提交" onclick="reloadList()">
+        </div>
+        <div style="clear: both"></div>
+        <table align="center" width="600" border="2">
+            <thead>
+            <tr bgcolor="aqua">
+                <th>ID</th>
+                <th>商品</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>总价</th>
+                <th>销售日期</th>
+                <th>销售员</th>
+            </tr>
+            </thead>
+            <tbody id="data"></tbody>
+        </table>
+    </form>
+</div>
+<script src="/js/jquery/jquery-1.12.4.min.js"></script>
+<script src="/js/jquery/jquery.form.js"></script>
+<script src="/js/moment/moment.min.js"></script>
+<script src="/js/numeral/numeral.min.js"></script>
+<script src="/js/numeral/chs.min.js"></script>
+<script src="/js/common/base.js"></script>
+<script src="/js/common/normal.js"></script>
+<script>
+    var Base = {"url":"/"};
+    function reloadList() {
+        $.post("querSaleByOrder".parseUrl(Base.url),{"order":$("#orderBy").val()},function (result) {
+            var obj = $.dealJSONObj(result);
+            if (!obj.code) {
+                // language=Angular2Html
+                var s = "<tr>\n    <td>{0}</td>\n    <td>{1}</td>\n    <td>{2}</td>\n    <td>{3}</td>\n    <td>{4}</td>\n    <td>{5}</td>\n    <td>{6}</td>\n</tr>";
+                var str = "";
+                $.each(obj.data, function (k, v) {
+                    s = s.formatStr(
+                        v.id,
+                        v.productName,
+                        numeral(v.price).format("$,0.00"),
+                        v.quantity,
+                        numeral(v.totalPrice).format("$,0.00"),
+                        moment(v.saleDate, 'x').format("YYYY-MM-DD"),
+                        v.userName
+                    );
+                    str += s;
+                })
+                $("#data").empty();
+                $("#data").html(str);
+            }else {
+                $("#data").empty();
+                $("#data").html("<tr><td colspan='7'>暂时没有销售记录</td></tr>")
+            }
+        })
+    }
+</script>
+</body>
+</html>
+
+
+
+
+function fenlei() {
+$.post("findleixing".parseUrl(Base.url),{"categoryId":$("#orderBy").val()},function (result) {
+var obj = $.dealJSONObj(result);
+if (!obj.code) {
+// language=Angular2Html
+var s = "<tr>\n    <td>{0}</td>\n    <td>{1}</td>\n    <td>{2}</td>\n    <td>{3}</td>\n    <td>{4}</td>\n</tr>";
+var str = "";
+$.each(obj.data, function (k, v) {
+s = s.formatStr(
+v.id,
+v.title,
+v.summary,
+v.uploadUser,
+v.createDate
+);
+str += s;
+})
+$("#data").empty();
+$("#data").html(str);
+}
+
+});
+
+}

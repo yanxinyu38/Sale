@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="float: right;width: 620px;height: 400px;text-align: center;">
+    <form id="ff">
+        <div style="float: left">
+            <strong>查看库存</strong>
+        </div>
+        <div style="float: right">
+            商品名称：
+            <select id="productId" name="productId"></select>
+            &nbsp;
+            <input type="button" value="查询" onclick="showNum()">
+        </div>
+        <div style="clear: both"></div>
+        <table align="center" width="600" border="2">
+            <tbody id="data"></tbody>
+        </table>
+        <div style="clear: both"></div>
+    </form>
+</div>
+
+
+<script src="/js/jquery/jquery-1.12.4.min.js"></script>
+<script src="/js/jquery/jquery.form.js"></script>
+<script src="/js/moment/moment.min.js"></script>
+<script src="/js/numeral/numeral.min.js"></script>
+<script src="/js/numeral/chs.min.js"></script>
+<script src="/js/common/base.js"></script>
+<script src="/js/common/normal.js"></script>
+<script>
+    $(function () {
+        $.post("getAllProducts".parseUrl("/"),function (result) {
+            var obj = $.dealJSONObj(result);
+            if(!obj.code) {
+                $("#productId").selectRenderByArray(obj.data,"id","productName","0","请选择商品");
+            }
+        })
+    })
+function showNum() {
+    $.post("getProductQuantityById".parseUrl("/"),{"id":$("#productId").val()},function (result) {
+        var obj = $.dealJSONObj(result);
+        if(!obj.code) {
+            $("#data").empty();
+            $("#data").html("<tr><td>该商品的库存是："+obj.data+"</td></tr>");
+        }
+    })
+}
+</script>
+</body>
+</html>
